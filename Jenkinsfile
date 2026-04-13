@@ -36,7 +36,13 @@ pipeline {
 
     stage('Run Playwright Tests') {
       steps {
-        sh 'npm test -- --env ${TARGET_ENV} --project=${BROWSER_PROJECT}'
+        sh '''
+if [ "${TARGET_ENV}" = "local" ]; then
+  npm test -- --env local --project=${BROWSER_PROJECT} --base-url http://host.docker.internal:4000/fashionhub/
+else
+  npm test -- --env ${TARGET_ENV} --project=${BROWSER_PROJECT}
+fi
+'''
       }
     }
   }
