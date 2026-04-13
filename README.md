@@ -1,52 +1,52 @@
 # FashionHub Playwright Automation
 
-Projekt automatyzuje scenariusz logowania dla FashionHub z naciskiem na:
-- uruchamianie na wielu przegladarkach (Chromium, Firefox, WebKit),
-- uruchamianie na wielu srodowiskach (local, staging, production),
-- prosty deployment do CI/CD (np. Jenkins + Docker).
+This project automates the FashionHub login scenario with a focus on:
+- running across multiple browsers (Chromium, Firefox, WebKit),
+- running across multiple environments (local, staging, production),
+- simple CI/CD deployment (for example Jenkins + Docker).
 
-## 1) Wymagania
+## 1) Requirements
 
 - Node.js 20+
 - npm 9+
-- (opcjonalnie) Docker do uruchomienia aplikacji lokalnie
+- (optional) Docker to run the app locally
 
-## 2) Instalacja
+## 2) Installation
 
 ```bash
 npm install
 npx playwright install chromium firefox webkit
 ```
 
-## 3) Konfiguracja srodowisk
+## 3) Environment configuration
 
-Domyslne adresy sa w `config/environments.json`:
+Default URLs are defined in `config/environments.json`:
 
 - `local`: `http://localhost:4000/fashionhub/`
 - `staging`: `https://staging-env/fashionhub/`
 - `production`: `https://pocketaces2.github.io/fashionhub/`
 
-Mechanizm wyboru srodowiska:
+Environment selection priority:
 
-1. parametr CLI `--env` (najwyzszy priorytet),
-2. zmienna `TEST_ENV`,
-3. `defaultEnvironment` z `config/environments.json` (fallback).
+1. CLI parameter `--env` (highest priority),
+2. `TEST_ENV` environment variable,
+3. `defaultEnvironment` from `config/environments.json` (fallback).
 
-Mechanizm wyboru `baseURL`:
+`baseURL` selection priority:
 
-1. parametr CLI `--base-url`,
-2. zmienna `BASE_URL`,
-3. URL przypisany do wybranego srodowiska w `config/environments.json`.
+1. CLI parameter `--base-url`,
+2. `BASE_URL` environment variable,
+3. URL assigned to the selected environment in `config/environments.json`.
 
-## 4) Uruchomienie testow
+## 4) Running tests
 
-### Wszystkie przegladarki
+### All browsers
 
 ```bash
 npm test
 ```
 
-### Konkretne srodowisko
+### Specific environment
 
 ```bash
 npm run test:local
@@ -54,20 +54,20 @@ npm run test:staging
 npm run test:prod
 ```
 
-### Nadpisanie z CLI (priorytet)
+### Override from CLI (highest priority)
 
 ```bash
 npm test -- --env staging
 npm test -- --env production --base-url https://pocketaces2.github.io/fashionhub/
 ```
 
-### Jedna przegladarka
+### Single browser
 
 ```bash
 npm run test:chromium
 ```
 
-### Raport HTML
+### HTML report
 
 ```bash
 npm run report
@@ -75,42 +75,42 @@ npm run report
 
 ## 5) Build/check
 
-Projekt jest w TypeScript, wiec dodano krok walidacji:
+The project is written in TypeScript, so a validation step is included:
 
 ```bash
 npm run build
 ```
 
-## 6) Scenariusz zaimplementowany
+## 6) Implemented scenario
 
-Scenariusz: uzytkownik loguje sie poprawnymi danymi i widzi komunikat powitalny zawierajacy username.
+Scenario: a user logs in with valid credentials and sees a welcome message containing the username.
 
-- URL: `/login.html` (na wybranym `baseURL`)
+- URL: `/login.html` (on the selected `baseURL`)
 - Username: `demouser`
 - Password: `fashion123`
 
-Pliki:
+Files:
 - `tests/login.spec.ts`
 - `src/pages/loginPage.ts`
 - `src/test-data/users.ts`
 
-## 7) Uruchomienie aplikacji lokalnie (Docker)
+## 7) Running the app locally (Docker)
 
-W tresci zadania wskazany jest obraz "Fashionhub Demo App". Uzyj obrazu zgodnego z dokumentacja zadania, np.:
+The task description references the "Fashionhub Demo App" image. Use an image consistent with the task documentation, for example:
 
 ```bash
 docker run -d --name fashionhub -p 4000:80 <FASHIONHUB_IMAGE>
 ```
 
-Nastepnie:
+Then run:
 
 ```bash
 npm run test:local
 ```
 
-## 8) Jenkins / CI (przyklad)
+## 8) Jenkins / CI (example)
 
-W pipeline uruchom:
+Run the following in your pipeline:
 
 ```bash
 npm ci
@@ -119,7 +119,7 @@ npm run build
 npm test -- --env staging
 ```
 
-## 9) Struktura projektu
+## 9) Project structure
 
 ```text
 config/
