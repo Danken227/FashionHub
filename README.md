@@ -142,7 +142,13 @@ The pipeline stages are:
 1. `Checkout`
 2. `Install Dependencies` (`npm ci`)
 3. `Build Validation` (`npm run build`)
-4. `Run Playwright Tests` (`npm test -- --env ${TARGET_ENV} --project=${BROWSER_PROJECT}`)
+4. `Run Playwright Tests`
+
+Behavior of the test command:
+- for `TARGET_ENV=local`, the pipeline runs:
+  - `npm test -- --env local --project=${BROWSER_PROJECT} --base-url http://host.docker.internal:4000/fashionhub/`
+- for `TARGET_ENV=staging` or `production`, the pipeline runs:
+  - `npm test -- --env ${TARGET_ENV} --project=${BROWSER_PROJECT}`
 
 ### Step 5: Collect results
 
@@ -154,8 +160,15 @@ Open archived artifacts from the build page to inspect failure screenshots, trac
 
 ### Optional: running against local environment
 
-If you choose `TARGET_ENV=local`, make sure the FashionHub app is reachable from the Jenkins runtime at:
-- `http://localhost:4000/fashionhub/`
+If you choose `TARGET_ENV=local`, start the FashionHub app on the host machine first:
+
+```bash
+docker run -d --name fashionhub -p 4000:80 <FASHIONHUB_IMAGE>
+```
+
+In the Jenkins Docker pipeline, `localhost` points to the container itself, not the host.  
+That is why the pipeline uses:
+- `http://host.docker.internal:4000/fashionhub/`
 
 If your app runs on a different host/port in CI, pass a custom URL:
 
