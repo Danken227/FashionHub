@@ -26,9 +26,7 @@ export class LoginPage {
     await this.loginButton.click();
   }
 
-  async expectWelcomeMessageFor(username: string): Promise<void> {
-    await expect(this.page.getByText(new RegExp(`welcome.*${username}`, "i"))).toBeVisible({
-      timeout: 10_000
-    });
+  async expectWelcomeMessage(username: string): Promise<void> {
+    await expect(this.page.getByText(`Welcome, ${username}`)).toBeVisible();
   }
 }

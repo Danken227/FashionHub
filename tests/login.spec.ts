@@ -8,6 +8,6 @@ test.describe("Login", () => {
 
     await loginPage.goto();
     await loginPage.loginWith(validUser.username, validUser.password);
-    await loginPage.expectWelcomeMessageFor(validUser.username);
+    await loginPage.expectWelcomeMessage(validUser.username);
   });
 });
