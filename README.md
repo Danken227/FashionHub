@@ -108,15 +108,59 @@ Then run:
 npm run test:local
 ```
 
-## 8) Jenkins / CI (example)
+## 8) How to run in Jenkins
 
-Run the following in your pipeline:
+This repository includes a ready-to-use `Jenkinsfile` that runs tests inside a Docker Playwright image.
+
+### Step 1: Create a Pipeline job
+
+1. In Jenkins, create a new **Pipeline** job.
+2. In **Pipeline definition**, choose **Pipeline script from SCM**.
+3. Select your SCM (for example Git) and provide the repository URL.
+4. Ensure the script path is `Jenkinsfile`.
+
+### Step 2: Ensure Jenkins agent prerequisites
+
+The Jenkins agent that executes this job must have:
+- Docker available and accessible for the Jenkins user,
+- internet access to pull `mcr.microsoft.com/playwright:v1.59.1-noble`,
+- access to your repository.
+
+### Step 3: Run the pipeline with parameters
+
+The pipeline exposes two parameters:
+- `TARGET_ENV`: `staging`, `production`, or `local`,
+- `BROWSER_PROJECT`: `chromium`, `firefox`, or `webkit`.
+
+Recommended first run:
+- `TARGET_ENV=staging`
+- `BROWSER_PROJECT=chromium`
+
+### Step 4: What the Jenkinsfile executes
+
+The pipeline stages are:
+1. `Checkout`
+2. `Install Dependencies` (`npm ci`)
+3. `Build Validation` (`npm run build`)
+4. `Run Playwright Tests` (`npm test -- --env ${TARGET_ENV} --project=${BROWSER_PROJECT}`)
+
+### Step 5: Collect results
+
+After each run, Jenkins archives:
+- `playwright-report/**`
+- `test-results/**`
+
+Open archived artifacts from the build page to inspect failure screenshots, traces, videos, and HTML report files.
+
+### Optional: running against local environment
+
+If you choose `TARGET_ENV=local`, make sure the FashionHub app is reachable from the Jenkins runtime at:
+- `http://localhost:4000/fashionhub/`
+
+If your app runs on a different host/port in CI, pass a custom URL:
 
 ```bash
-npm ci
-npx playwright install --with-deps
-npm run build
-npm test -- --env staging
+npm test -- --env local --base-url http://<host>:<port>/fashionhub/
 ```
 
 ## 9) Project structure
