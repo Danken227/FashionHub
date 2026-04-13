@@ -1,0 +1,30 @@
+{
+  "name": "fashionhub-playwright-automation",
+  "version": "1.0.0",
+  "description": "Playwright automation suite for FashionHub login flow across environments and browsers.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "test": "node ./scripts/run-playwright.mjs test",
+    "test:headed": "node ./scripts/run-playwright.mjs test --headed",
+    "test:local": "node ./scripts/run-playwright.mjs test --env local",
+    "test:staging": "node ./scripts/run-playwright.mjs test --env staging",
+    "test:prod": "node ./scripts/run-playwright.mjs test --env production",
+    "test:chromium": "node ./scripts/run-playwright.mjs test --project=chromium",
+    "report": "node ./scripts/run-playwright.mjs show-report"
+  },
+  "keywords": [
+    "playwright",
+    "automation",
+    "e2e",
+    "cross-browser"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "dotenv": "^17.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.2"
+  }
+}
